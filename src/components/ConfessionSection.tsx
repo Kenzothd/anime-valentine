@@ -15,7 +15,7 @@ const baseLines = [
   "And somehow, you still choose to stay right next to me.",
 ];
 
-function TypewriterLine({ text, index, allLines, speed = 30 }: { text: string; index: number; allLines: string[]; speed?: number }) {
+function TypewriterLine({ text, index, allLines, speed = 50 }: { text: string; index: number; allLines: string[]; speed?: number }) {
   // Calculate delay: wait for all previous lines to finish typing
   // Each character takes 'speed' ms, plus 200ms pause between lines
   const delay = allLines.slice(0, index).reduce((acc, prevText) => acc + prevText.length * speed + 200, 200);

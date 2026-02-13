@@ -13,7 +13,7 @@ const memories = [
   "You are my favorite notification, my safest person, and my softest home.",
 ];
 
-function TypewriterCard({ text, index, speed = 30 }: { text: string; index: number; speed?: number }) {
+function TypewriterCard({ text, index, speed = 50 }: { text: string; index: number; speed?: number }) {
   // Calculate delay: wait for all previous lines to finish typing
   // Each character takes 'speed' ms, plus 300ms pause between cards
   const delay = memories.slice(0, index).reduce((acc, prevText) => acc + prevText.length * speed + 300, 300);

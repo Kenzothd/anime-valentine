@@ -4,7 +4,7 @@ import { IntroSection } from "./components/IntroSection";
 import { StorySection } from "./components/StorySection";
 import {
   InteractiveSection,
-  type Choices
+  type Choices,
 } from "./components/InteractiveSection";
 import { ConfessionSection } from "./components/ConfessionSection";
 import { DecisionSection } from "./components/DecisionSection";
@@ -52,7 +52,9 @@ function App() {
         <div className="absolute inset-x-0 bottom-0 h-56 bg-[radial-gradient(circle_at_bottom,rgba(225,239,199,0.7),transparent_60%)]" />
       </div>
       <MusicToggle
-        isPlaying={step === "secret" ? endingMusic.isPlaying : mainMusic.isPlaying}
+        isPlaying={
+          step === "secret" ? endingMusic.isPlaying : mainMusic.isPlaying
+        }
         onToggle={() => {
           if (step === "secret") {
             // ensure main track is off whenever we toggle the ending theme
@@ -152,8 +154,8 @@ function App() {
       <footer className="fixed bottom-0 left-0 right-0 z-10 bg-ghibliSky-900/95 backdrop-blur-sm border-t border-ghibliLeaf-300/30 px-4 py-2">
         <div className="flex flex-col items-center gap-2 max-w-2xl mx-auto">
           <p className="text-xs text-white/90 text-center">
-            Disclaimer: All artwork and music used in this app are not mine. This
-            whole app is just for fun and personal use. ♡
+            Disclaimer: All artwork and music used in this app are not mine.
+            This whole app is just for fun and for personal use only. ♡
           </p>
           <a
             href="https://github.com/Kenzothd"
@@ -179,4 +181,3 @@ function App() {
 }
 
 export default App;
-

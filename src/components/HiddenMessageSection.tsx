@@ -14,7 +14,7 @@ const messageLines = [
   "— from me, to my Valentine ♡"
 ];
 
-function TypewriterMessage({ text, index, allLines, speed = 25 }: { text: string; index: number; allLines: string[]; speed?: number }) {
+function TypewriterMessage({ text, index, allLines, speed = 45 }: { text: string; index: number; allLines: string[]; speed?: number }) {
   // Calculate delay: wait for all previous lines to finish typing
   // Each character takes 'speed' ms, plus 300ms pause between lines
   const delay = allLines.slice(0, index).reduce((acc, prevText) => acc + prevText.length * speed + 300, 500);
