@@ -3,9 +3,18 @@ import { SectionShell } from "./SectionShell";
 
 type IntroSectionProps = {
   onStart: () => void;
+  onMusicStart?: () => void;
 };
 
-export function IntroSection({ onStart }: IntroSectionProps) {
+export function IntroSection({ onStart, onMusicStart }: IntroSectionProps) {
+  const handleClick = () => {
+    // Trigger music first (iOS requires direct user interaction)
+    if (onMusicStart) {
+      onMusicStart();
+    }
+    onStart();
+  };
+
   return (
     <SectionShell>
       <div className="flex flex-col items-center text-center gap-6">
@@ -18,7 +27,7 @@ export function IntroSection({ onStart }: IntroSectionProps) {
           transition={{ duration: 0.8, ease: "easeOut" }}
         />
         <motion.p
-          className="text-lg md:text-xl text-ghibliCream leading-relaxed"
+          className="text-lg md:text-xl text-white leading-relaxed font-medium"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
@@ -26,7 +35,7 @@ export function IntroSection({ onStart }: IntroSectionProps) {
           Hey love… I made a tiny anime story just for you.
         </motion.p>
         <motion.p
-          className="text-sm text-ghibliCream/80 max-w-xs sm:max-w-md"
+          className="text-sm text-white/95 max-w-xs sm:max-w-md"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
@@ -36,7 +45,8 @@ export function IntroSection({ onStart }: IntroSectionProps) {
         </motion.p>
         <motion.button
           type="button"
-          onClick={onStart}
+          onClick={handleClick}
+          onTouchStart={handleClick}
           className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-ghibliLeaf-300 text-ghibliInk font-medium shadow-soft-card hover:bg-ghibliLeaf-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ghibliCream focus-visible:ring-offset-2 focus-visible:ring-offset-ghibliSky-900 transition"
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}

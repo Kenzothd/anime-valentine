@@ -11,7 +11,7 @@ export function DecisionSection({ onYes }: DecisionSectionProps) {
     <SectionShell>
       <div className="space-y-6 text-center relative min-h-[200px]">
         <motion.p
-          className="text-lg md:text-xl text-ghibliCream/95"
+          className="text-lg md:text-xl text-white"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -19,7 +19,7 @@ export function DecisionSection({ onYes }: DecisionSectionProps) {
           So… here&apos;s my question.
         </motion.p>
         <motion.p
-          className="text-2xl md:text-3xl font-semibold text-ghibliCream"
+          className="text-2xl md:text-3xl font-semibold text-white"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
@@ -85,7 +85,7 @@ function RunawayNoButton() {
       type="button"
       onClick={handleClick}
       onTouchStart={handleClick}
-      className="px-4 py-2 rounded-full bg-ghibliSky-900/80 border border-ghibliLeaf-300/50 text-ghibliCream text-xs cursor-pointer select-none z-20"
+      className="px-4 py-2 rounded-full bg-ghibliSky-900/90 border border-ghibliLeaf-300/50 text-white text-xs cursor-pointer select-none z-20"
       style={{
         x: springX,
         y: springY

@@ -80,7 +80,15 @@ function App() {
       >
         <AnimatePresence mode={prefersReducedMotion ? "sync" : "wait"}>
           {step === "intro" && (
-            <IntroSection key="intro" onStart={() => setStep("story")} />
+            <IntroSection
+              key="intro"
+              onStart={() => setStep("story")}
+              onMusicStart={() => {
+                if (mainMusic.isReady && !mainMusic.isPlaying) {
+                  void mainMusic.play();
+                }
+              }}
+            />
           )}
           {step === "story" && (
             <StorySection key="story" onNext={() => setStep("interactive")} />
@@ -135,9 +143,9 @@ function App() {
           )}
         </AnimatePresence>
       </main>
-      <footer className="fixed bottom-0 left-0 right-0 z-10 bg-ghibliSky-900/90 backdrop-blur-sm border-t border-ghibliLeaf-300/30 px-4 py-2">
+      <footer className="fixed bottom-0 left-0 right-0 z-10 bg-ghibliSky-900/95 backdrop-blur-sm border-t border-ghibliLeaf-300/30 px-4 py-2">
         <div className="flex flex-col items-center gap-2 max-w-2xl mx-auto">
-          <p className="text-xs text-ghibliCream/70 text-center">
+          <p className="text-xs text-white/90 text-center">
             Disclaimer: All artwork and music used in this app are not mine. This
             whole app is just for fun and personal use. ♡
           </p>
@@ -145,7 +153,7 @@ function App() {
             href="https://github.com/Kenzothd"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-ghibliCream/80 hover:text-ghibliCream transition-colors"
+            className="inline-flex items-center gap-1.5 text-white/90 hover:text-white transition-colors"
             aria-label="Visit Kenzo's GitHub profile"
           >
             <svg

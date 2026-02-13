@@ -48,7 +48,7 @@ export function InteractiveSection({
     <SectionShell title="Tonight’s episode">
       <div className="space-y-6">
         <div>
-          <p className="text-sm text-ghibliCream/90 mb-3">
+          <p className="text-sm text-white mb-3 font-medium">
             First, choose our perfect Valentine&apos;s date:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -62,7 +62,7 @@ export function InteractiveSection({
                   className={`text-left rounded-2xl px-4 py-3 border shadow-soft-card backdrop-blur-md transition focus:outline-none focus-visible:ring-2 focus-visible:ring-ghibliCream focus-visible:ring-offset-2 focus-visible:ring-offset-ghibliSky-900 ${
                     selected
                       ? "bg-ghibliLeaf-300/90 border-ghibliLeaf-100 text-ghibliInk"
-                      : "bg-ghibliSky-900/70 border-ghibliLeaf-300/40 text-ghibliCream/95 hover:border-ghibliLeaf-200/80"
+                      : "bg-ghibliSky-900/85 border-ghibliLeaf-300/40 text-white hover:border-ghibliLeaf-200/80"
                   }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -76,7 +76,7 @@ export function InteractiveSection({
         </div>
 
         <div>
-          <p className="text-sm text-ghibliCream/90 mb-3">
+          <p className="text-sm text-white mb-3 font-medium">
             And what kind of you do I get tonight?
           </p>
           <div className="grid grid-cols-2 gap-3">
@@ -90,7 +90,7 @@ export function InteractiveSection({
                   className={`text-center rounded-2xl px-3 py-3 border shadow-soft-card backdrop-blur-md text-xs sm:text-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-ghibliCream focus-visible:ring-offset-2 focus-visible:ring-offset-ghibliSky-900 ${
                     selected
                       ? "bg-ghibliLeaf-300/90 border-ghibliLeaf-100 text-ghibliInk"
-                      : "bg-ghibliSky-900/70 border-ghibliLeaf-300/40 text-ghibliCream/95 hover:border-ghibliLeaf-200/80"
+                      : "bg-ghibliSky-900/85 border-ghibliLeaf-300/40 text-white hover:border-ghibliLeaf-200/80"
                   }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

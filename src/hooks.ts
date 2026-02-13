@@ -26,21 +26,48 @@ export function useBackgroundMusic(src: string, loop = true) {
   useEffect(() => {
     const audio = new Audio(src);
     audio.loop = loop;
+    // iOS Safari requires these attributes
+    audio.setAttribute("playsinline", "true");
+    audio.setAttribute("preload", "auto");
+    audio.crossOrigin = "anonymous";
     audioRef.current = audio;
+
     const onCanPlay = () => setIsReady(true);
+    const onLoadedData = () => setIsReady(true);
+
     audio.addEventListener("canplaythrough", onCanPlay);
+    audio.addEventListener("loadeddata", onLoadedData);
+    // Try to load immediately
+    audio.load();
+
     return () => {
       audio.pause();
       audio.removeEventListener("canplaythrough", onCanPlay);
+      audio.removeEventListener("loadeddata", onLoadedData);
     };
   }, [src, loop]);
 
   const play = async () => {
-    if (!audioRef.current || !isReady) return;
+    if (!audioRef.current) return;
     try {
-      await audioRef.current.play();
-      setIsPlaying(true);
-    } catch {
+      // For iOS, ensure audio is loaded
+      if (audioRef.current.readyState < 2) {
+        await new Promise((resolve) => {
+          const onCanPlay = () => {
+            audioRef.current?.removeEventListener("canplay", onCanPlay);
+            resolve(undefined);
+          };
+          audioRef.current?.addEventListener("canplay", onCanPlay);
+          audioRef.current?.load();
+        });
+      }
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        await playPromise;
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.log("Audio play error:", error);
       // autoplay might be blocked; user can tap again
     }
   };
@@ -60,12 +87,27 @@ export function useBackgroundMusic(src: string, loop = true) {
   };
 
   const playFrom = async (startSeconds: number) => {
-    if (!audioRef.current || !isReady) return;
-    audioRef.current.currentTime = startSeconds;
+    if (!audioRef.current) return;
     try {
-      await audioRef.current.play();
-      setIsPlaying(true);
-    } catch {
+      // For iOS, ensure audio is loaded
+      if (audioRef.current.readyState < 2) {
+        await new Promise((resolve) => {
+          const onCanPlay = () => {
+            audioRef.current?.removeEventListener("canplay", onCanPlay);
+            resolve(undefined);
+          };
+          audioRef.current?.addEventListener("canplay", onCanPlay);
+          audioRef.current?.load();
+        });
+      }
+      audioRef.current.currentTime = startSeconds;
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        await playPromise;
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.log("Audio playFrom error:", error);
       // ignore autoplay errors
     }
   };

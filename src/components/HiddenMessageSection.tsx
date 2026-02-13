@@ -14,7 +14,7 @@ export function HiddenMessageSection({
     return (
       <SectionShell>
         <div className="flex flex-col items-center gap-4 text-center">
-          <p className="text-sm text-ghibliCream/90 max-w-xs sm:max-w-sm">
+          <p className="text-sm text-white max-w-xs sm:max-w-sm">
             There&apos;s a tiny secret epilogue hidden here. Tap the glowing
             heart three times to unlock it.
           </p>
@@ -36,11 +36,11 @@ export function HiddenMessageSection({
           <img
             src="/ending.gif"
             alt="Animated gif showing a soft romantic ending scene"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover blur-sm"
           />
         </div>
-        <div className="relative bg-ghibliSky-900/95 p-6 md:p-8">
-          <p className="text-base md:text-lg text-ghibliCream font-medium leading-relaxed space-y-3 tracking-wide">
+        <div className="relative bg-ghibliSky-900/98 p-6 md:p-8">
+          <p className="text-base md:text-lg text-white font-medium leading-relaxed space-y-3 tracking-wide">
             <span className="block mb-2">
               Thank you for being my favorite person, my safe place, and my
               accidental main character. I don&apos;t know what the future
@@ -50,11 +50,11 @@ export function HiddenMessageSection({
               On the loud days, on the soft days, on the days where we&apos;re
               both just tired little blobs—thank you for letting me love you.
             </span>
-            <span className="block mt-4 text-sm md:text-base text-ghibliCream/90">
+            <span className="block mt-4 text-sm md:text-base text-white/95">
               P.S. Future us, if you&apos;re rereading this on some random
               night: I still pick you. Every time.
             </span>
-            <span className="block mt-4 text-right font-handwriting text-ghibliCream text-lg md:text-xl">
+            <span className="block mt-4 text-right font-handwriting text-white text-lg md:text-xl">
               — from me, to my Valentine ♡
             </span>
           </p>

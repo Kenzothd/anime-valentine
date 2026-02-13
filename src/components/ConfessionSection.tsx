@@ -27,7 +27,7 @@ export function ConfessionSection({
   return (
     <SectionShell title="The quiet moment">
       <motion.div
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ghibliSky-800 via-ghibliSky-900 to-ghibliLeaf-700/50 p-5 border border-ghibliLeaf-300/40 shadow-soft-card"
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ghibliSky-800/95 via-ghibliSky-900/95 to-ghibliLeaf-700/60 p-5 border border-ghibliLeaf-300/40 shadow-soft-card"
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
@@ -38,7 +38,7 @@ export function ConfessionSection({
           {lines.map((line, index) => (
             <motion.p
               key={index}
-              className="text-sm md:text-base text-ghibliCream/95"
+              className="text-sm md:text-base text-white font-medium"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * index }}

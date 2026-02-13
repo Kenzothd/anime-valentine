@@ -19,13 +19,13 @@ export function StorySection({ onNext }: StorySectionProps) {
         {memories.map((text, index) => (
           <motion.article
             key={index}
-            className="bg-ghibliSky-900/70 border border-ghibliLeaf-300/40 rounded-2xl px-4 py-3 shadow-soft-card"
+            className="bg-ghibliSky-900/85 border border-ghibliLeaf-300/40 rounded-2xl px-4 py-3 shadow-soft-card"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10%" }}
             transition={{ delay: index * 0.1, duration: 0.4 }}
           >
-            <p className="text-sm md:text-base text-ghibliCream/95">{text}</p>
+            <p className="text-sm md:text-base text-white font-medium">{text}</p>
           </motion.article>
         ))}
       </div>
