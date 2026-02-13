@@ -22,93 +22,159 @@ export function useBackgroundMusic(src: string, loop = true) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isReady, setIsReady] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const hasUserInteractedRef = useRef(false);
 
   useEffect(() => {
-    const audio = new Audio(src);
+    // Create audio element - iOS Safari works better with DOM elements
+    const audio = document.createElement("audio");
+    audio.src = src;
     audio.loop = loop;
     // iOS Safari requires these attributes
     audio.setAttribute("playsinline", "true");
     audio.setAttribute("preload", "auto");
-    audio.crossOrigin = "anonymous";
+    audio.setAttribute("webkit-playsinline", "true");
+    // Don't set crossOrigin unless CORS is properly configured
+    // audio.crossOrigin = "anonymous";
+    
+    // Add to DOM (hidden) - helps with iOS Safari compatibility
+    audio.style.display = "none";
+    audio.style.position = "absolute";
+    audio.style.visibility = "hidden";
+    document.body.appendChild(audio);
+    
     audioRef.current = audio;
-
+    
     const onCanPlay = () => setIsReady(true);
     const onLoadedData = () => setIsReady(true);
-
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const onError = (e: Event) => {
+      console.log("Audio loading error:", e);
+      const target = e.target as HTMLAudioElement;
+      if (target.error) {
+        console.log("Audio error code:", target.error.code, "message:", target.error.message);
+      }
+    };
+    
     audio.addEventListener("canplaythrough", onCanPlay);
     audio.addEventListener("loadeddata", onLoadedData);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("ended", onPause);
+    audio.addEventListener("error", onError);
+    
     // Try to load immediately
-    audio.load();
-
+    try {
+      audio.load();
+    } catch (err) {
+      console.log("Audio load error:", err);
+    }
+    
     return () => {
       audio.pause();
       audio.removeEventListener("canplaythrough", onCanPlay);
       audio.removeEventListener("loadeddata", onLoadedData);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("ended", onPause);
+      audio.removeEventListener("error", onError);
+      // Remove from DOM
+      if (audio.parentNode) {
+        audio.parentNode.removeChild(audio);
+      }
     };
   }, [src, loop]);
 
-  const play = async () => {
+  const play = () => {
     if (!audioRef.current) return;
+    
+    // iOS Safari requires play() to be called synchronously from user interaction
+    // Don't use async/await here as it breaks the call stack
     try {
-      // For iOS, ensure audio is loaded
-      if (audioRef.current.readyState < 2) {
-        await new Promise((resolve) => {
-          const onCanPlay = () => {
-            audioRef.current?.removeEventListener("canplay", onCanPlay);
-            resolve(undefined);
-          };
-          audioRef.current?.addEventListener("canplay", onCanPlay);
-          audioRef.current?.load();
-        });
+      const audio = audioRef.current;
+      
+      // If not ready, try to load first
+      if (audio.readyState < 2) {
+        audio.load();
       }
-      const playPromise = audioRef.current.play();
+      
+      // iOS Safari: play() must be called synchronously
+      const playPromise = audio.play();
+      
       if (playPromise !== undefined) {
-        await playPromise;
+        // Handle promise but don't await - iOS needs synchronous call
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+            hasUserInteractedRef.current = true;
+          })
+          .catch((error) => {
+            console.log("Audio play error:", error);
+            setIsPlaying(false);
+          });
+      } else {
+        // If play() doesn't return a promise, assume it started
         setIsPlaying(true);
+        hasUserInteractedRef.current = true;
       }
     } catch (error) {
       console.log("Audio play error:", error);
-      // autoplay might be blocked; user can tap again
+      setIsPlaying(false);
     }
   };
 
   const pause = () => {
     if (!audioRef.current) return;
-    audioRef.current.pause();
-    setIsPlaying(false);
+    try {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } catch (error) {
+      console.log("Audio pause error:", error);
+    }
   };
 
   const toggle = () => {
     if (isPlaying) {
       pause();
     } else {
-      void play();
+      play();
     }
   };
 
-  const playFrom = async (startSeconds: number) => {
+  const playFrom = (startSeconds: number) => {
     if (!audioRef.current) return;
+    
     try {
-      // For iOS, ensure audio is loaded
-      if (audioRef.current.readyState < 2) {
-        await new Promise((resolve) => {
-          const onCanPlay = () => {
-            audioRef.current?.removeEventListener("canplay", onCanPlay);
-            resolve(undefined);
-          };
-          audioRef.current?.addEventListener("canplay", onCanPlay);
-          audioRef.current?.load();
-        });
+      const audio = audioRef.current;
+      
+      // If not ready, try to load first
+      if (audio.readyState < 2) {
+        audio.load();
       }
-      audioRef.current.currentTime = startSeconds;
-      const playPromise = audioRef.current.play();
+      
+      // Set time first
+      audio.currentTime = startSeconds;
+      
+      // iOS Safari: play() must be called synchronously
+      const playPromise = audio.play();
+      
       if (playPromise !== undefined) {
-        await playPromise;
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+            hasUserInteractedRef.current = true;
+          })
+          .catch((error) => {
+            console.log("Audio playFrom error:", error);
+            setIsPlaying(false);
+          });
+      } else {
         setIsPlaying(true);
+        hasUserInteractedRef.current = true;
       }
     } catch (error) {
       console.log("Audio playFrom error:", error);
-      // ignore autoplay errors
+      setIsPlaying(false);
     }
   };
 

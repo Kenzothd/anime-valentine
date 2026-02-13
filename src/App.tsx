@@ -69,12 +69,14 @@ function App() {
         className="relative max-w-md mx-auto sm:max-w-xl"
         onClick={() => {
           // First user interaction should attempt to start the correct track.
+          // iOS Safari requires synchronous calls - don't use async/await
+          // Try to play even if not ready - iOS may need user interaction to initialize
           if (step === "secret" && secretUnlocked) {
-            if (endingMusic.isReady && !endingMusic.isPlaying) {
-              void endingMusic.playFrom(17);
+            if (!endingMusic.isPlaying) {
+              endingMusic.playFrom(17);
             }
-          } else if (mainMusic.isReady && !mainMusic.isPlaying) {
-            void mainMusic.play();
+          } else if (!mainMusic.isPlaying) {
+            mainMusic.play();
           }
         }}
       >
@@ -84,8 +86,10 @@ function App() {
               key="intro"
               onStart={() => setStep("story")}
               onMusicStart={() => {
-                if (mainMusic.isReady && !mainMusic.isPlaying) {
-                  void mainMusic.play();
+                // iOS Safari requires synchronous call from user interaction
+                // Try to play even if not ready - iOS may need user interaction to initialize
+                if (!mainMusic.isPlaying) {
+                  mainMusic.play();
                 }
               }}
             />
@@ -131,12 +135,14 @@ function App() {
             <HiddenMessageSection
               key="secret"
               unlocked={secretUnlocked}
-              onUnlock={async () => {
+              onUnlock={() => {
                 // FORCE STOP Always With Me before unlocking
                 mainMusic.pause();
                 setSecretUnlocked(true);
-                if (endingMusic.isReady) {
-                  await endingMusic.playFrom(17);
+                // iOS Safari requires synchronous call from user interaction
+                // Try to play even if not ready - iOS may need user interaction to initialize
+                if (!endingMusic.isPlaying) {
+                  endingMusic.playFrom(17);
                 }
               }}
             />
