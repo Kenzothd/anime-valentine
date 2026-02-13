@@ -17,7 +17,7 @@ type InteractiveSectionProps = {
 
 const dateOptions: { id: DateOption; label: string; subtitle: string }[] = [
   { id: "movie", label: "Cozy movie night", subtitle: "Blankets, snacks, your head on my shoulder." },
-  { id: "dinner", label: "Fancy dinner", subtitle: "We dress up like we’re in a drama." },
+  { id: "dinner", label: "Fancy dinner", subtitle: "We dress up like we're in a drama." },
   { id: "stargazing", label: "Stargazing", subtitle: "Just us, the sky, and endless what-ifs." },
   { id: "arcade", label: "Arcade chaos", subtitle: "I try to win you the biggest plushie." }
 ];
@@ -45,7 +45,7 @@ export function InteractiveSection({
   const canContinue = value.date && value.mood;
 
   return (
-    <SectionShell title="Tonight’s episode">
+    <SectionShell>
       <div className="space-y-6">
         <div>
           <p className="text-sm text-white mb-3 font-medium">
@@ -119,4 +119,3 @@ export function InteractiveSection({
     </SectionShell>
   );
 }
-

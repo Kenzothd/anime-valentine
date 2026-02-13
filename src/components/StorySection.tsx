@@ -39,7 +39,7 @@ function TypewriterCard({ text, index, speed = 50 }: { text: string; index: numb
 
 export function StorySection({ onNext }: StorySectionProps) {
   return (
-    <SectionShell title="Previously… in our story">
+    <SectionShell>
       <div className="flex flex-col gap-4 max-h-[60vh] overflow-y-auto pr-1">
         {memories.map((text, index) => (
           <TypewriterCard key={index} text={text} index={index} />

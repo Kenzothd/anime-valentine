@@ -55,7 +55,7 @@ export function ConfessionSection({
   );
 
   return (
-    <SectionShell title="The quiet moment">
+    <SectionShell>
       <motion.div
         className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ghibliSky-800/95 via-ghibliSky-900/95 to-ghibliLeaf-700/60 p-5 border border-ghibliLeaf-300/40 shadow-soft-card"
         initial={{ opacity: 0, scale: 0.98 }}

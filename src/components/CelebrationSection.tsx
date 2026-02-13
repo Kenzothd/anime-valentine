@@ -11,7 +11,7 @@ export function CelebrationSection({
   onRevealSecret,
 }: CelebrationSectionProps) {
   return (
-    <SectionShell title="Correct answer">
+    <SectionShell>
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-ghibliBlush-300/80 via-ghibliCream to-ghibliLeaf-200/80 p-6 md:p-8 shadow-soft-card">
         <div className="absolute inset-0 pointer-events-none">
           {hearts.map((_, index) => (
