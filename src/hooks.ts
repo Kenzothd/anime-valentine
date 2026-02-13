@@ -18,6 +18,44 @@ export function usePrefersReducedMotion(): boolean {
   return prefersReducedMotion;
 }
 
+export function useTypewriter(text: string, speed: number = 30, delay: number = 0) {
+  const [displayedText, setDisplayedText] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  useEffect(() => {
+    // Skip animation if user prefers reduced motion
+    if (prefersReducedMotion) {
+      setDisplayedText(text);
+      setIsComplete(true);
+      return;
+    }
+
+    setDisplayedText("");
+    setIsComplete(false);
+    let currentIndex = 0;
+    const timeoutId = setTimeout(() => {
+      const intervalId = setInterval(() => {
+        if (currentIndex < text.length) {
+          setDisplayedText(text.slice(0, currentIndex + 1));
+          currentIndex++;
+        } else {
+          setIsComplete(true);
+          clearInterval(intervalId);
+        }
+      }, speed);
+
+      return () => clearInterval(intervalId);
+    }, delay);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [text, speed, delay, prefersReducedMotion]);
+
+  return { displayedText, isComplete };
+}
+
 export function useBackgroundMusic(src: string, loop = true) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isReady, setIsReady] = useState(false);
@@ -35,15 +73,15 @@ export function useBackgroundMusic(src: string, loop = true) {
     audio.setAttribute("webkit-playsinline", "true");
     // Don't set crossOrigin unless CORS is properly configured
     // audio.crossOrigin = "anonymous";
-    
+
     // Add to DOM (hidden) - helps with iOS Safari compatibility
     audio.style.display = "none";
     audio.style.position = "absolute";
     audio.style.visibility = "hidden";
     document.body.appendChild(audio);
-    
+
     audioRef.current = audio;
-    
+
     const onCanPlay = () => setIsReady(true);
     const onLoadedData = () => setIsReady(true);
     const onPlay = () => setIsPlaying(true);
@@ -52,24 +90,29 @@ export function useBackgroundMusic(src: string, loop = true) {
       console.log("Audio loading error:", e);
       const target = e.target as HTMLAudioElement;
       if (target.error) {
-        console.log("Audio error code:", target.error.code, "message:", target.error.message);
+        console.log(
+          "Audio error code:",
+          target.error.code,
+          "message:",
+          target.error.message,
+        );
       }
     };
-    
+
     audio.addEventListener("canplaythrough", onCanPlay);
     audio.addEventListener("loadeddata", onLoadedData);
     audio.addEventListener("play", onPlay);
     audio.addEventListener("pause", onPause);
     audio.addEventListener("ended", onPause);
     audio.addEventListener("error", onError);
-    
+
     // Try to load immediately
     try {
       audio.load();
     } catch (err) {
       console.log("Audio load error:", err);
     }
-    
+
     return () => {
       audio.pause();
       audio.removeEventListener("canplaythrough", onCanPlay);
@@ -87,20 +130,20 @@ export function useBackgroundMusic(src: string, loop = true) {
 
   const play = () => {
     if (!audioRef.current) return;
-    
+
     // iOS Safari requires play() to be called synchronously from user interaction
     // Don't use async/await here as it breaks the call stack
     try {
       const audio = audioRef.current;
-      
+
       // If not ready, try to load first
       if (audio.readyState < 2) {
         audio.load();
       }
-      
+
       // iOS Safari: play() must be called synchronously
       const playPromise = audio.play();
-      
+
       if (playPromise !== undefined) {
         // Handle promise but don't await - iOS needs synchronous call
         playPromise
@@ -143,21 +186,21 @@ export function useBackgroundMusic(src: string, loop = true) {
 
   const playFrom = (startSeconds: number) => {
     if (!audioRef.current) return;
-    
+
     try {
       const audio = audioRef.current;
-      
+
       // If not ready, try to load first
       if (audio.readyState < 2) {
         audio.load();
       }
-      
+
       // Set time first
       audio.currentTime = startSeconds;
-      
+
       // iOS Safari: play() must be called synchronously
       const playPromise = audio.play();
-      
+
       if (playPromise !== undefined) {
         playPromise
           .then(() => {

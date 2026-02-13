@@ -1,14 +1,77 @@
 import { motion } from "framer-motion";
 import { SectionShell } from "./SectionShell";
+import { useTypewriter } from "../hooks";
 
 type HiddenMessageSectionProps = {
   unlocked: boolean;
   onUnlock: () => void;
 };
 
+const messageLines = [
+  "Thank you for being my favorite person, my safe place, and my accidental main character. I don't know what the future looks like, but I know I want you in all of it.",
+  "On the loud days, on the soft days, on the days where we're both just tired little blobs—thank you for letting me love you.",
+  "P.S. Future us, if you're rereading this on some random night: I still pick you. Every time.",
+  "— from me, to my Valentine ♡"
+];
+
+function TypewriterMessage({ text, index, allLines, speed = 25 }: { text: string; index: number; allLines: string[]; speed?: number }) {
+  // Calculate delay: wait for all previous lines to finish typing
+  // Each character takes 'speed' ms, plus 300ms pause between lines
+  const delay = allLines.slice(0, index).reduce((acc, prevText) => acc + prevText.length * speed + 300, 500);
+  const { displayedText } = useTypewriter(text, speed, delay);
+
+  if (index === 3) {
+    // Last line (signature) - right aligned
+    return (
+      <motion.span
+        className="block mt-4 text-right font-handwriting text-white text-lg md:text-xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {displayedText}
+        {displayedText.length < text.length && (
+          <span className="animate-pulse">|</span>
+        )}
+      </motion.span>
+    );
+  }
+
+  if (index === 2) {
+    // P.S. line
+    return (
+      <motion.span
+        className="block mt-4 text-sm md:text-base text-white/95"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {displayedText}
+        {displayedText.length < text.length && (
+          <span className="animate-pulse">|</span>
+        )}
+      </motion.span>
+    );
+  }
+
+  return (
+    <motion.span
+      className="block mb-2"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
+      {displayedText}
+      {displayedText.length < text.length && (
+        <span className="animate-pulse">|</span>
+      )}
+    </motion.span>
+  );
+}
+
 export function HiddenMessageSection({
   unlocked,
-  onUnlock
+  onUnlock,
 }: HiddenMessageSectionProps) {
   if (!unlocked) {
     return (
@@ -41,22 +104,9 @@ export function HiddenMessageSection({
         </div>
         <div className="relative bg-ghibliSky-900/98 p-6 md:p-8">
           <p className="text-base md:text-lg text-white font-medium leading-relaxed space-y-3 tracking-wide">
-            <span className="block mb-2">
-              Thank you for being my favorite person, my safe place, and my
-              accidental main character. I don&apos;t know what the future
-              looks like, but I know I want you in all of it.
-            </span>
-            <span className="block mb-2">
-              On the loud days, on the soft days, on the days where we&apos;re
-              both just tired little blobs—thank you for letting me love you.
-            </span>
-            <span className="block mt-4 text-sm md:text-base text-white/95">
-              P.S. Future us, if you&apos;re rereading this on some random
-              night: I still pick you. Every time.
-            </span>
-            <span className="block mt-4 text-right font-handwriting text-white text-lg md:text-xl">
-              — from me, to my Valentine ♡
-            </span>
+            {messageLines.map((line, index) => (
+              <TypewriterMessage key={index} text={line} index={index} allLines={messageLines} />
+            ))}
           </p>
         </div>
       </motion.div>
@@ -83,20 +133,21 @@ function TripleTapHeart({ onUnlock }: { onUnlock: () => void }) {
         boxShadow: [
           "0 0 0 0 rgba(248, 113, 113, 0.6)",
           "0 0 0 12px rgba(248, 113, 113, 0)",
-          "0 0 0 0 rgba(248, 113, 113, 0)"
-        ]
+          "0 0 0 0 rgba(248, 113, 113, 0)",
+        ],
       }}
       transition={{
         duration: 1.8,
         repeat: Infinity,
-        ease: "easeOut"
+        ease: "easeOut",
       }}
     >
       <span aria-hidden="true">♡</span>
-      <span className="sr-only">Tap three times to unlock the secret message</span>
+      <span className="sr-only">
+        Tap three times to unlock the secret message
+      </span>
     </motion.button>
   );
 }
 
 let taps = 0;
-
