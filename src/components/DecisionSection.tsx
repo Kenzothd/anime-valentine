@@ -30,9 +30,20 @@ export function DecisionSection({ onYes }: DecisionSectionProps) {
           <motion.button
             type="button"
             onClick={onYes}
-            className="px-7 py-3 rounded-full bg-ghibliLeaf-300 text-ghibliInk font-semibold shadow-soft-card text-lg hover:bg-ghibliLeaf-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ghibliCream focus-visible:ring-offset-2 focus-visible:ring-offset-ghibliSky-900 transition z-10"
+            className="px-7 py-3 rounded-full bg-ghibliLeaf-300 text-ghibliInk font-semibold shadow-soft-card text-lg hover:bg-ghibliLeaf-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ghibliCream focus-visible:ring-offset-2 focus-visible:ring-offset-ghibliSky-900 transition z-10 min-w-[140px]"
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.96 }}
+            animate={{
+              rotate: [0, -8, 8, -8, 8, -4, 4, 0],
+              x: [0, -5, 5, -5, 5, -3, 3, 0],
+              scale: [1, 1.05, 1, 1.05, 1]
+            }}
+            transition={{
+              duration: 0.6,
+              repeat: Infinity,
+              repeatDelay: 1,
+              ease: "easeInOut"
+            }}
           >
             Yes (๑˃̵ᴗ˂̵)ﻭ
           </motion.button>
@@ -85,14 +96,13 @@ function RunawayNoButton() {
       type="button"
       onClick={handleClick}
       onTouchStart={handleClick}
-      className="px-4 py-2 rounded-full bg-ghibliSky-900/90 border border-ghibliLeaf-300/50 text-white text-xs cursor-pointer select-none z-20"
+      className="px-7 py-3 rounded-full bg-ghibliSky-900/90 border border-ghibliLeaf-300/50 text-white text-lg font-semibold cursor-pointer select-none z-20 shadow-soft-card min-w-[140px]"
       style={{
         x: springX,
         y: springY
       }}
-      whileHover={!isFlying ? { scale: 1.1 } : {}}
-      animate={!isFlying ? { rotate: [0, -5, 5, -5, 5, 0] } : {}}
-      transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+      whileHover={!isFlying ? { scale: 1.06 } : {}}
+      whileTap={!isFlying ? { scale: 0.96 } : {}}
     >
       No (incorrect)
     </motion.button>
